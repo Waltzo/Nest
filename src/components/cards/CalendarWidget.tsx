@@ -12,7 +12,7 @@ function rotationLabel(year: number, month: number, day: number): string {
   const diff = Math.round((Date.UTC(year, month, day) - ROTATION_BASE) / 86400000)
   const r4 = ((diff % 4) + 4) % 4
   const r8 = ((diff % 8) + 8) % 8
-  if (r4 === 0) return '워코치테'
+  if (r4 === 0) return '워코'
   if (r4 === 1) return '봉바'
   if (r8 === 6) return '제압'
   if (r4 === 3) return '온살'

@@ -17,8 +17,10 @@ import Toolbar from './components/Toolbar'
 import PasswordGate from './components/PasswordGate'
 import TokenModal from './components/TokenModal'
 import CardEditorModal from './components/CardEditorModal'
+import EasterEgg from './components/EasterEgg'
 
 const UNLOCK_KEY = 'nest.unlocked'
+const EASTER_EGG_WIDTH = 400
 
 // Ensure every card has a mobile (sm) layout. Missing ones are stacked in a
 // single column so the 4-col view is tidy instead of an auto-reflowed jumble.
@@ -45,6 +47,7 @@ export default function App() {
   const [pendingPublish, setPendingPublish] = useState(false)
   const [editingCardId, setEditingCardId] = useState<string | null>(null)
   const [editBreakpoint, setEditBreakpoint] = useState<Breakpoint>('lg')
+  const [winW, setWinW] = useState(() => window.innerWidth)
   const [publishing, setPublishing] = useState(false)
   const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null)
   const firstLoad = useRef(true)
@@ -52,6 +55,13 @@ export default function App() {
   // Initial load.
   useEffect(() => {
     loadConfig().then((c) => setConfig(withSmLayouts(c)))
+  }, [])
+
+  // Track viewport width for the tiny-screen easter egg.
+  useEffect(() => {
+    const onResize = () => setWinW(window.innerWidth)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [])
 
   // Apply theme to <html> for CSS variables.
@@ -194,6 +204,9 @@ export default function App() {
       showToast(e instanceof Error ? e.message : 'Import 실패', 'err')
     }
   }
+
+  // Easter egg: on very narrow screens, the nest can't hold the dashboard.
+  if (winW < EASTER_EGG_WIDTH) return <EasterEgg />
 
   if (!config) {
     return (
