@@ -88,9 +88,9 @@
       "type": "memo",
       "layout": {
         "x": 0,
-        "y": 2,
+        "y": 3,
         "w": 4,
-        "h": 5
+        "h": 4
       },
       "props": {
         "markdown": "# Notes\n\n- Edit me\n- Drag & resize in edit mode"
@@ -169,10 +169,10 @@
       "id": "f56845bf-4b2c-42b1-87cc-03b6f77b6c0e",
       "type": "youtube",
       "layout": {
-        "x": 8,
-        "y": 5,
+        "x": 0,
+        "y": 2,
         "w": 4,
-        "h": 3
+        "h": 1
       },
       "props": {
         "url": "https://youtu.be/l_1-ZD87g5s?si=FvgmDsAgBYRNAl4j",
