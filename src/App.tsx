@@ -180,7 +180,7 @@ export default function App() {
   const editingCard = config.cards.find((c) => c.id === editingCardId) ?? null
 
   return (
-    <div className="app">
+    <div className={`app${editing ? ' editing' : ''}`}>
       <Toolbar
         editing={editing}
         theme={config.theme}

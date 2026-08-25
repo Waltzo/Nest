@@ -36,6 +36,10 @@
   bottom: 0;
   right: 0;
   cursor: se-resize;
+  display: none; /* only shown in edit mode */
+}
+.app.editing .react-grid-item > .react-resizable-handle {
+  display: block;
 }
 .react-grid-item > .react-resizable-handle::after {
   content: '';
@@ -51,7 +55,8 @@
 /* ---- Theme tokens ---- */
 :root {
   --grid-line: rgba(0, 0, 0, 0.05);
-  --grid-line-strong: rgba(0, 0, 0, 0.08);
+  --grid-line-strong: rgba(0, 0, 0, 0.11);
+  --grid-line-edit: rgba(99, 102, 241, 0.22);
   --bg-1: #eef2ff;
   --bg-2: #fce7f3;
   --bg-3: #dbeafe;
@@ -65,7 +70,8 @@
 
 :root[data-theme='dark'] {
   --grid-line: rgba(255, 255, 255, 0.05);
-  --grid-line-strong: rgba(255, 255, 255, 0.09);
+  --grid-line-strong: rgba(255, 255, 255, 0.12);
+  --grid-line-edit: rgba(129, 140, 248, 0.3);
   --bg-1: #1e1b4b;
   --bg-2: #3b0764;
   --bg-3: #0c4a6e;
@@ -92,29 +98,38 @@ body {
   color: var(--text);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
     sans-serif;
-  /* Colorful gradient behind the glass so blur has something to refract,
-     plus a 모눈 (graph-paper) grid overlay. */
+  /* Colorful gradient behind the glass so blur has something to refract. */
   background-color: var(--bg-1);
   background-image:
-    linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px),
     radial-gradient(circle at 15% 20%, var(--bg-2) 0%, transparent 45%),
     radial-gradient(circle at 85% 30%, var(--bg-3) 0%, transparent 45%),
     radial-gradient(circle at 50% 90%, var(--bg-2) 0%, transparent 50%);
-  background-size:
-    40px 40px,
-    40px 40px,
-    100% 100%,
-    100% 100%,
-    100% 100%;
   background-attachment: fixed;
   min-height: 100vh;
 }
 
 .app {
+  position: relative;
   max-width: 1400px;
   margin: 0 auto;
   padding: 16px 20px 80px;
+}
+
+/* The precise, cell-aligned edit grid is rendered by GridBoard (.grid-overlay)
+   using the measured column width / row height. */
+.grid-board-wrap {
+  position: relative;
+}
+
+.grid-overlay {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-board-wrap .layout {
+  position: relative;
+  z-index: 1;
 }
 
 button {
