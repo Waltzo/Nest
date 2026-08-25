@@ -59,9 +59,15 @@ export type CardProps =
 export interface Card {
   id: string
   type: CardType
-  layout: CardLayout
+  layout: CardLayout // desktop / lg (12 cols)
+  layoutSm?: CardLayout // mobile / sm (4 cols)
   props: Record<string, unknown>
 }
+
+// Two fixed breakpoints only, each with its own stored layout.
+export const SM_COLS = 4
+// Below this container width the dashboard renders the mobile (sm) layout.
+export const SM_VIEW_BREAK = 700
 
 export interface DashboardConfig {
   version: number

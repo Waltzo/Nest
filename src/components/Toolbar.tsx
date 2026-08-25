@@ -1,10 +1,12 @@
 import { useRef } from 'react'
 import type { CardType } from '../types'
+import type { Breakpoint } from './GridBoard'
 
 interface Props {
   editing: boolean
   theme: 'light' | 'dark'
   publishing: boolean
+  editBreakpoint: Breakpoint
   onToggleEdit: () => void
   onToggleTheme: () => void
   onAddCard: (type: CardType) => void
@@ -13,6 +15,7 @@ interface Props {
   onExport: () => void
   onImport: (file: File) => void
   onRefreshFromRepo: () => void
+  onToggleBreakpoint: () => void
 }
 
 const ADD_TYPES: { type: CardType; label: string }[] = [
@@ -37,6 +40,8 @@ export default function Toolbar({
   onExport,
   onImport,
   onRefreshFromRepo,
+  editBreakpoint,
+  onToggleBreakpoint,
 }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -57,6 +62,13 @@ export default function Toolbar({
 
       {editing && (
         <>
+          <button
+            onClick={onToggleBreakpoint}
+            title="편집할 레이아웃 전환 (데스크탑 12칼럼 / 모바일 4칼럼)"
+          >
+            {editBreakpoint === 'lg' ? '🖥 데스크탑' : '📱 모바일'}
+          </button>
+
           <details className="add-menu">
             <summary>＋ 카드 추가</summary>
             <div className="add-list glass">

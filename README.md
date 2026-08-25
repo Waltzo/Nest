@@ -8,8 +8,9 @@
 
 ## 특징
 
-- **벤토그리드**: `react-grid-layout` 기반 드래그/리사이즈. 모눈(graph-paper) 배경에
-  자유 배치(`compactType=null`, 겹침 방지).
+- **벤토그리드**: `react-grid-layout` 기반 드래그/리사이즈. 자유 배치(`compactType=null`,
+  겹침 방지). 화면 폭에 따라 **데스크탑(12칼럼)/모바일(4칼럼)** 레이아웃을 각각 저장해
+  창 크기가 바뀌어도 배치가 뒤섞이지 않음(편집 모드에서 🖥/📱 토글로 각각 편집).
 - **글라스모피즘**: `backdrop-filter` 블러 + 그라디언트 배경.
 - **위젯 7종**: 링크/북마크, 메모(마크다운), 시계, 날씨(open-meteo), 이미지/프로필,
   미니 캘린더(날짜 클릭 → Google Calendar), 유튜브 음악 플레이어(영상/재생목록 임베드).
@@ -66,7 +67,8 @@ Publish는 `Waltzo/Nest`의 `public/dashboard.json`에 커밋합니다.
 ```ts
 interface DashboardConfig {
   version: number
-  cards: { id; type; layout: {x,y,w,h}; props }[]
+  cards: { id; type; layout: {x,y,w,h}; layoutSm?: {x,y,w,h}; props }[]
+  // layout = 데스크탑(12칼럼), layoutSm = 모바일(4칼럼)
   theme: 'light' | 'dark'
   cols: number       // 모눈 열 수 (기본 12)
   rowHeight: number  // 행 픽셀 (기본 80)

@@ -117,17 +117,13 @@ body {
 
 /* The precise, cell-aligned edit grid is rendered by GridBoard (.grid-overlay)
    using the measured column width / row height. */
-.grid-board-wrap {
-  position: relative;
-}
-
 .grid-overlay {
   position: absolute;
   pointer-events: none;
   z-index: 0;
 }
 
-.grid-board-wrap .layout {
+.grid-canvas .layout {
   position: relative;
   z-index: 1;
 }

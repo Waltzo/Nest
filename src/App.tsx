@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import type { Layout } from 'react-grid-layout'
-import type { Card, CardType, DashboardConfig } from './types'
-import { cardDefaults, cardDefaultSize } from './types'
+import type { Card, CardType, CardLayout, DashboardConfig } from './types'
+import { cardDefaults, cardDefaultSize, SM_COLS } from './types'
+import type { Breakpoint } from './components/GridBoard'
 import {
   loadConfig,
   saveLocal,
@@ -19,6 +20,23 @@ import CardEditorModal from './components/CardEditorModal'
 
 const UNLOCK_KEY = 'nest.unlocked'
 
+// Ensure every card has a mobile (sm) layout. Missing ones are stacked in a
+// single column so the 4-col view is tidy instead of an auto-reflowed jumble.
+function withSmLayouts(cfg: DashboardConfig): DashboardConfig {
+  let nextY = cfg.cards.reduce(
+    (m, c) => (c.layoutSm ? Math.max(m, c.layoutSm.y + c.layoutSm.h) : m),
+    0,
+  )
+  const cards = cfg.cards.map((c) => {
+    if (c.layoutSm) return c
+    const w = Math.min(SM_COLS, Math.max(1, c.layout.w))
+    const sm: CardLayout = { x: 0, y: nextY, w, h: c.layout.h }
+    nextY += c.layout.h
+    return { ...c, layoutSm: sm }
+  })
+  return { ...cfg, cards }
+}
+
 export default function App() {
   const [config, setConfig] = useState<DashboardConfig | null>(null)
   const [editing, setEditing] = useState(false)
@@ -26,13 +44,14 @@ export default function App() {
   const [tokenOpen, setTokenOpen] = useState(false)
   const [pendingPublish, setPendingPublish] = useState(false)
   const [editingCardId, setEditingCardId] = useState<string | null>(null)
+  const [editBreakpoint, setEditBreakpoint] = useState<Breakpoint>('lg')
   const [publishing, setPublishing] = useState(false)
   const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null)
   const firstLoad = useRef(true)
 
   // Initial load.
   useEffect(() => {
-    loadConfig().then(setConfig)
+    loadConfig().then((c) => setConfig(withSmLayouts(c)))
   }, [])
 
   // Apply theme to <html> for CSS variables.
@@ -89,15 +108,20 @@ export default function App() {
   function addCard(type: CardType) {
     if (!config) return
     const size = cardDefaultSize[type]
-    // Drop new card at the bottom of the grid.
+    // Drop new card at the bottom of each layout.
     const maxY = config.cards.reduce(
       (m, c) => Math.max(m, c.layout.y + c.layout.h),
+      0,
+    )
+    const maxYSm = config.cards.reduce(
+      (m, c) => (c.layoutSm ? Math.max(m, c.layoutSm.y + c.layoutSm.h) : m),
       0,
     )
     const card: Card = {
       id: uuid(),
       type,
       layout: { x: 0, y: maxY, w: size.w, h: size.h },
+      layoutSm: { x: 0, y: maxYSm, w: Math.min(SM_COLS, size.w), h: size.h },
       props: { ...cardDefaults[type] },
     }
     patch({ cards: [...config.cards, card] })
@@ -108,13 +132,15 @@ export default function App() {
     patch({ cards: config.cards.filter((c) => c.id !== id) })
   }
 
-  function onLayoutChange(layout: Layout[]) {
+  function onLayoutChange(bp: Breakpoint, layout: Layout[]) {
     if (!config) return
     const byId = new Map(layout.map((l) => [l.i, l]))
     patch({
       cards: config.cards.map((c) => {
         const l = byId.get(c.id)
-        return l ? { ...c, layout: { x: l.x, y: l.y, w: l.w, h: l.h } } : c
+        if (!l) return c
+        const next: CardLayout = { x: l.x, y: l.y, w: l.w, h: l.h }
+        return bp === 'sm' ? { ...c, layoutSm: next } : { ...c, layout: next }
       }),
     })
   }
@@ -155,14 +181,14 @@ export default function App() {
 
   async function refreshFromRepo() {
     const repo = await fetchRepoConfig()
-    setConfig(repo)
+    setConfig(withSmLayouts(repo))
     showToast('리포의 config를 불러왔습니다.', 'ok')
   }
 
   async function doImport(file: File) {
     try {
       const imported = await importConfig(file)
-      setConfig(imported)
+      setConfig(withSmLayouts(imported))
       showToast('Import 완료.', 'ok')
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Import 실패', 'err')
@@ -195,6 +221,10 @@ export default function App() {
         onExport={() => exportConfig(config)}
         onImport={doImport}
         onRefreshFromRepo={refreshFromRepo}
+        editBreakpoint={editBreakpoint}
+        onToggleBreakpoint={() =>
+          setEditBreakpoint((b) => (b === 'lg' ? 'sm' : 'lg'))
+        }
       />
 
       <GridBoard
@@ -202,6 +232,7 @@ export default function App() {
         cols={config.cols}
         rowHeight={config.rowHeight}
         editing={editing}
+        editBreakpoint={editBreakpoint}
         onLayoutChange={onLayoutChange}
         onDeleteCard={deleteCard}
         onEditCard={setEditingCardId}
