@@ -91,7 +91,7 @@
       "id": "39e29c1d-c8f7-4571-8769-91bd758f38cf",
       "type": "link",
       "layout": {
-        "x": 2,
+        "x": 1,
         "y": 7,
         "w": 1,
         "h": 1
@@ -106,7 +106,7 @@
       "id": "37707c91-2c77-42e7-bf50-913975a4e02a",
       "type": "link",
       "layout": {
-        "x": 1,
+        "x": 2,
         "y": 7,
         "w": 1,
         "h": 1
@@ -144,6 +144,21 @@
         "src": "https://pbs.twimg.com/media/G7fNgLzacAA9MHM?format=jpg&name=4096x4096",
         "alt": "image",
         "caption": ""
+      }
+    },
+    {
+      "id": "e37afc91-1ed9-4231-a9f7-4f0921d4d694",
+      "type": "link",
+      "layout": {
+        "x": 3,
+        "y": 7,
+        "w": 1,
+        "h": 1
+      },
+      "props": {
+        "title": "스프레드시트",
+        "url": "https://docs.google.com/spreadsheets/d/1CoFfvGqp9rrPgxsg8XaZ5ys-e-iJBdhiy_mrPCRawv4/edit?gid=1404050390#gid=1404050390",
+        "icon": "🔗"
       }
     }
   ],
