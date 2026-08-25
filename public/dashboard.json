@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "theme": "light",
+  "cols": 12,
+  "rowHeight": 80,
+  "cards": [
+    {
+      "id": "seed-profile",
+      "type": "image",
+      "layout": { "x": 0, "y": 0, "w": 3, "h": 3 },
+      "props": {
+        "src": "",
+        "name": "Waltzo",
+        "bio": "Welcome to my Nest 🪺"
+      }
+    },
+    {
+      "id": "seed-clock",
+      "type": "clock",
+      "layout": { "x": 3, "y": 0, "w": 3, "h": 2 },
+      "props": { "timezone": "Asia/Seoul", "format24": true }
+    },
+    {
+      "id": "seed-weather",
+      "type": "weather",
+      "layout": { "x": 6, "y": 0, "w": 3, "h": 2 },
+      "props": { "lat": 37.5665, "lon": 126.978, "label": "서울" }
+    },
+    {
+      "id": "seed-calendar",
+      "type": "calendar",
+      "layout": { "x": 9, "y": 0, "w": 3, "h": 3 },
+      "props": {}
+    },
+    {
+      "id": "seed-memo",
+      "type": "memo",
+      "layout": { "x": 3, "y": 2, "w": 3, "h": 3 },
+      "props": { "markdown": "# Notes\n\n- Edit me\n- Drag & resize in edit mode" }
+    },
+    {
+      "id": "seed-github",
+      "type": "link",
+      "layout": { "x": 6, "y": 2, "w": 2, "h": 2 },
+      "props": { "title": "GitHub", "url": "https://github.com/Waltzo", "icon": "🐙" }
+    },
+    {
+      "id": "seed-gcal",
+      "type": "link",
+      "layout": { "x": 8, "y": 2, "w": 2, "h": 2 },
+      "props": {
+        "title": "Google Calendar",
+        "url": "https://calendar.google.com",
+        "icon": "📅"
+      }
+    }
+  ]
+}

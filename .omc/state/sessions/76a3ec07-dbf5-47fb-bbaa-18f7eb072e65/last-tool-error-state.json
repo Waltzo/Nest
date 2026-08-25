@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"pkill -f \\\"vite preview\\\" 2>/dev/null; echo done\",\"description\":\"Stop preview server\"}",
+  "error": "Exit code 144",
+  "timestamp": "2026-08-25T01:38:59.847Z",
+  "retry_count": 1
+}
