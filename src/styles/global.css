@@ -29,6 +29,11 @@
   -webkit-user-select: none;
   user-select: none;
 }
+/* Hover-to-make-room engaged: green placeholder signals cards will be pushed. */
+.layout.push-mode .react-grid-item.react-grid-placeholder {
+  background: #10b981;
+  opacity: 0.4;
+}
 .react-grid-item > .react-resizable-handle {
   position: absolute;
   width: 20px;

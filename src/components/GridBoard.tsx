@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import GridLayout, { WidthProvider } from 'react-grid-layout'
-import type { Layout } from 'react-grid-layout'
+import type { Layout, ItemCallback } from 'react-grid-layout'
 import type { Card, CardLayout } from '../types'
 import { SM_COLS, SM_VIEW_BREAK } from '../types'
 import CardShell from './CardShell'
@@ -20,6 +20,15 @@ const MARGIN = 14
 const PAD = 14
 // Width of the mobile editing canvas (so sm can be edited on a wide screen).
 const SM_EDIT_WIDTH = 460
+// Hover-to-make-room dwell time before colliding cards get pushed aside.
+const DWELL_MS = 1500
+
+function overlaps(
+  a: { x: number; y: number; w: number; h: number },
+  b: { x: number; y: number; w: number; h: number },
+): boolean {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y
+}
 
 export type Breakpoint = 'lg' | 'sm'
 
@@ -72,6 +81,24 @@ export default function GridBoard({
   const measureRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
 
+  // Hover-to-make-room: while dragging, if the held card's target cell overlaps
+  // another card for DWELL_MS, we flip preventCollision off so RGL pushes the
+  // colliding cards out of the way. Reset on drop.
+  const [pushMode, setPushMode] = useState(false)
+  const grab = useRef({ dx: 0, dy: 0 })
+  const dwellTimer = useRef<number | undefined>(undefined)
+  const dwellCell = useRef<string | null>(null)
+
+  const clearDwell = () => {
+    if (dwellTimer.current !== undefined) {
+      clearTimeout(dwellTimer.current)
+      dwellTimer.current = undefined
+    }
+    dwellCell.current = null
+  }
+
+  useEffect(() => () => clearDwell(), [])
+
   useEffect(() => {
     const el = measureRef.current
     if (!el) return
@@ -119,6 +146,46 @@ export default function GridBoard({
         }
       : undefined
 
+  // --- Drag dwell handlers ---
+  const onDragStart: ItemCallback = (_l, _old, newItem, _ph, e) => {
+    setPushMode(false)
+    clearDwell()
+    const rect = measureRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const itemLeft = rect.left + PAD + newItem.x * pitchX
+    const itemTop = rect.top + PAD + newItem.y * pitchY
+    grab.current = { dx: e.clientX - itemLeft, dy: e.clientY - itemTop }
+  }
+
+  const onDrag: ItemCallback = (_l, _old, newItem, _ph, e) => {
+    if (pushMode) return // already making room
+    const rect = measureRef.current?.getBoundingClientRect()
+    if (!rect || pitchX <= 0) return
+    // Target top-left cell under the cursor (grab offset preserved).
+    const leftPx = e.clientX - grab.current.dx - rect.left - PAD
+    const topPx = e.clientY - grab.current.dy - rect.top - PAD
+    const tx = Math.max(0, Math.min(Math.round(leftPx / pitchX), nCols - newItem.w))
+    const ty = Math.max(0, Math.round(topPx / pitchY))
+    const target = { x: tx, y: ty, w: newItem.w, h: newItem.h }
+    const collides = layout.some((l) => l.i !== newItem.i && overlaps(target, l))
+    const cell = `${tx},${ty}`
+    if (collides) {
+      if (dwellCell.current !== cell) {
+        dwellCell.current = cell
+        if (dwellTimer.current !== undefined) clearTimeout(dwellTimer.current)
+        dwellTimer.current = window.setTimeout(() => setPushMode(true), DWELL_MS)
+      }
+    } else {
+      clearDwell()
+    }
+  }
+
+  const onDragStop: ItemCallback = () => {
+    // Layout is persisted by the Grid's onLayoutChange; here we only reset.
+    clearDwell()
+    setPushMode(false)
+  }
+
   return (
     <div className="grid-board-wrap">
       <div
@@ -132,7 +199,7 @@ export default function GridBoard({
       >
         {overlayStyle && <div className="grid-overlay" style={overlayStyle} />}
         <Grid
-          className="layout"
+          className={`layout${pushMode ? ' push-mode' : ''}`}
           layout={layout}
           cols={nCols}
           rowHeight={rowHeight}
@@ -142,7 +209,10 @@ export default function GridBoard({
           isResizable={editing}
           draggableHandle=".card-drag-handle"
           compactType={null}
-          preventCollision
+          preventCollision={!pushMode}
+          onDragStart={onDragStart}
+          onDrag={onDrag}
+          onDragStop={onDragStop}
           onLayoutChange={(l) => editing && onLayoutChange(activeBp, l)}
         >
           {cards.map((card) => (

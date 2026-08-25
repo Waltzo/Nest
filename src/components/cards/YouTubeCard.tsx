@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import type { YouTubeProps } from '../../types'
 import { useElementSize, clamp } from '../../hooks/useElementSize'
 
@@ -27,7 +28,13 @@ function toEmbedUrl(raw: string): string | null {
     return null
   }
 
-  const params = new URLSearchParams({ rel: '0', modestbranding: '1' })
+  // enablejsapi lets us play/pause via postMessage (used in compact mode).
+  const params = new URLSearchParams({
+    rel: '0',
+    modestbranding: '1',
+    enablejsapi: '1',
+    origin: window.location.origin,
+  })
   if (id) {
     if (list) params.set('list', list)
     return `https://www.youtube.com/embed/${id}?${params}`
@@ -43,9 +50,31 @@ export default function YouTubeCard({ props }: { props: Record<string, unknown> 
   const p = props as unknown as YouTubeProps
   const embed = toEmbedUrl(p.url)
   const [ref, { w, h }] = useElementSize()
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [playing, setPlaying] = useState(false)
+
   const base = Math.min(w || 0, h || 0)
   const titleSize = clamp(11, base * 0.09, 15)
   const showTitle = Boolean(p.title) && h >= 120
+  // 1-row-tall card → hide the video, show only controls + title.
+  const compact = h > 0 && h < 95
+
+  function command(func: 'playVideo' | 'pauseVideo') {
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func, args: [] }),
+      'https://www.youtube.com',
+    )
+  }
+
+  function toggle() {
+    if (playing) {
+      command('pauseVideo')
+      setPlaying(false)
+    } else {
+      command('playVideo')
+      setPlaying(true)
+    }
+  }
 
   if (!embed) {
     return (
@@ -68,6 +97,86 @@ export default function YouTubeCard({ props }: { props: Record<string, unknown> 
       </div>
     )
   }
+
+  const iframe = (
+    <iframe
+      ref={iframeRef}
+      src={embed}
+      title={p.title || 'YouTube player'}
+      style={{ width: '100%', height: '100%', border: 'none' }}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  )
+
+  if (compact) {
+    // iframe kept full-size (so audio plays) but hidden behind an opaque cover
+    // that shows only the play/stop button and the title.
+    const btn = clamp(24, h * 0.62, 44)
+    return (
+      <div ref={ref} style={{ position: 'relative', height: '100%', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0, pointerEvents: 'none' }}>
+          {iframe}
+        </div>
+        <div
+          className="glass"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            padding: '0 10px',
+            borderRadius: 0,
+            border: 'none',
+            boxShadow: 'none',
+          }}
+        >
+          <button
+            onClick={toggle}
+            title={playing ? '정지' : '재생'}
+            style={{
+              flex: '0 0 auto',
+              width: btn,
+              height: btn,
+              borderRadius: '50%',
+              border: 'none',
+              background: 'var(--accent)',
+              color: '#fff',
+              fontSize: btn * 0.4,
+              display: 'grid',
+              placeItems: 'center',
+            }}
+          >
+            {playing ? '⏸' : '▶'}
+          </button>
+          <span
+            style={{
+              fontSize: clamp(11, h * 0.28, 16),
+              fontWeight: 600,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            🎵 {p.title || 'Music'}
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  // Normal: visible player.
+  const styledIframe = (
+    <iframe
+      ref={iframeRef}
+      src={embed}
+      title={p.title || 'YouTube player'}
+      style={{ flex: 1, minHeight: 0, width: '100%', border: 'none', borderRadius: 12 }}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  )
 
   return (
     <div
@@ -93,19 +202,7 @@ export default function YouTubeCard({ props }: { props: Record<string, unknown> 
           </span>
         </div>
       )}
-      <iframe
-        src={embed}
-        title={p.title || 'YouTube player'}
-        style={{
-          flex: 1,
-          minHeight: 0,
-          width: '100%',
-          border: 'none',
-          borderRadius: 12,
-        }}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
+      {styledIframe}
     </div>
   )
 }
