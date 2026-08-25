@@ -9,6 +9,7 @@ import ClockWidget from './cards/ClockWidget'
 import WeatherWidget from './cards/WeatherWidget'
 import ImageCard from './cards/ImageCard'
 import CalendarWidget from './cards/CalendarWidget'
+import YouTubeCard from './cards/YouTubeCard'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
@@ -41,6 +42,8 @@ function renderCard(card: Card) {
       return <ImageCard props={card.props} />
     case 'calendar':
       return <CalendarWidget />
+    case 'youtube':
+      return <YouTubeCard props={card.props} />
     default:
       return null
   }

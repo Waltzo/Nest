@@ -1,4 +1,11 @@
-export type CardType = 'link' | 'memo' | 'clock' | 'weather' | 'image' | 'calendar'
+export type CardType =
+  | 'link'
+  | 'memo'
+  | 'clock'
+  | 'weather'
+  | 'image'
+  | 'calendar'
+  | 'youtube'
 
 export interface CardLayout {
   x: number
@@ -35,6 +42,10 @@ export interface ImageProps {
   bio?: string
 }
 export type CalendarProps = Record<string, never>
+export interface YouTubeProps {
+  url: string // any YouTube video or playlist link
+  title?: string
+}
 
 export type CardProps =
   | LinkProps
@@ -43,6 +54,7 @@ export type CardProps =
   | WeatherProps
   | ImageProps
   | CalendarProps
+  | YouTubeProps
 
 export interface Card {
   id: string
@@ -70,6 +82,7 @@ export const cardDefaults: Record<CardType, Record<string, unknown>> = {
   weather: { lat: 37.5665, lon: 126.978, label: '서울' },
   image: { src: '', alt: 'image', caption: '' },
   calendar: {},
+  youtube: { url: '', title: 'Music' },
 }
 
 // Sensible default size (in grid units) for a freshly added card.
@@ -80,4 +93,5 @@ export const cardDefaultSize: Record<CardType, { w: number; h: number }> = {
   weather: { w: 3, h: 2 },
   image: { w: 3, h: 3 },
   calendar: { w: 3, h: 3 },
+  youtube: { w: 4, h: 3 },
 }

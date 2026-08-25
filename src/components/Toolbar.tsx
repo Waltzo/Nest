@@ -22,6 +22,7 @@ const ADD_TYPES: { type: CardType; label: string }[] = [
   { type: 'weather', label: '🌤️ 날씨' },
   { type: 'image', label: '🖼️ 이미지/프로필' },
   { type: 'calendar', label: '📅 캘린더' },
+  { type: 'youtube', label: '🎵 유튜브 음악' },
 ]
 
 export default function Toolbar({

@@ -36,6 +36,10 @@ const FIELDS: Record<
     { key: 'alt', label: '대체 텍스트', type: 'text' },
   ],
   calendar: [],
+  youtube: [
+    { key: 'url', label: '유튜브 링크 (영상/재생목록)', type: 'text' },
+    { key: 'title', label: '제목', type: 'text' },
+  ],
 }
 
 export default function CardEditorModal({ card, onClose, onSave }: Props) {
