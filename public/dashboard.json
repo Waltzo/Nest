@@ -17,6 +17,12 @@
         "src": "https://avatars.githubusercontent.com/u/136535994?v=4",
         "name": "Waltzo",
         "bio": "홈패이지를 개편했습니다"
+      },
+      "layoutSm": {
+        "x": 0,
+        "y": 0,
+        "w": 2,
+        "h": 2
       }
     },
     {
@@ -31,6 +37,12 @@
       "props": {
         "timezone": "Asia/Seoul",
         "format24": true
+      },
+      "layoutSm": {
+        "x": 2,
+        "y": 0,
+        "w": 2,
+        "h": 1
       }
     },
     {
@@ -46,6 +58,12 @@
         "lat": 37.5665,
         "lon": 126.978,
         "label": "서울"
+      },
+      "layoutSm": {
+        "x": 2,
+        "y": 1,
+        "w": 2,
+        "h": 1
       }
     },
     {
@@ -57,7 +75,13 @@
         "w": 4,
         "h": 4
       },
-      "props": {}
+      "props": {},
+      "layoutSm": {
+        "x": 0,
+        "y": 4,
+        "w": 4,
+        "h": 4
+      }
     },
     {
       "id": "seed-memo",
@@ -70,6 +94,12 @@
       },
       "props": {
         "markdown": "# Notes\n\n- Edit me\n- Drag & resize in edit mode"
+      },
+      "layoutSm": {
+        "x": 0,
+        "y": 8,
+        "w": 4,
+        "h": 5
       }
     },
     {
@@ -85,6 +115,12 @@
         "title": "GitHub",
         "url": "https://github.com/Waltzo",
         "icon": "🐙"
+      },
+      "layoutSm": {
+        "x": 0,
+        "y": 2,
+        "w": 1,
+        "h": 1
       }
     },
     {
@@ -100,6 +136,12 @@
         "title": "정산 페이지",
         "url": "https://waltzo.github.io/SettleUp/",
         "icon": "🧾"
+      },
+      "layoutSm": {
+        "x": 1,
+        "y": 2,
+        "w": 1,
+        "h": 1
       }
     },
     {
@@ -115,6 +157,12 @@
         "title": "할부 페이지",
         "url": "https://waltzo.github.io/Halboos/",
         "icon": "🔗"
+      },
+      "layoutSm": {
+        "x": 2,
+        "y": 2,
+        "w": 1,
+        "h": 1
       }
     },
     {
@@ -129,6 +177,12 @@
       "props": {
         "url": "https://youtu.be/l_1-ZD87g5s?si=FvgmDsAgBYRNAl4j",
         "title": "Music"
+      },
+      "layoutSm": {
+        "x": 0,
+        "y": 3,
+        "w": 4,
+        "h": 1
       }
     },
     {
@@ -144,6 +198,12 @@
         "src": "https://pbs.twimg.com/media/G7fNgLzacAA9MHM?format=jpg&name=4096x4096",
         "alt": "image",
         "caption": ""
+      },
+      "layoutSm": {
+        "x": 0,
+        "y": 13,
+        "w": 4,
+        "h": 8
       }
     },
     {
@@ -159,6 +219,12 @@
         "title": "스프레드시트",
         "url": "https://docs.google.com/spreadsheets/d/1CoFfvGqp9rrPgxsg8XaZ5ys-e-iJBdhiy_mrPCRawv4/edit?gid=1404050390#gid=1404050390",
         "icon": "🔗"
+      },
+      "layoutSm": {
+        "x": 3,
+        "y": 2,
+        "w": 1,
+        "h": 1
       }
     }
   ],
