@@ -3,6 +3,23 @@ import { useElementSize, clamp } from '../../hooks/useElementSize'
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 
+// Rotation label under each date, mirroring the spreadsheet formula:
+//   diff = date - 2026-01-01 (days)
+//   MOD(diff,4)=0 → 워코치테, =1 → 봉바, MOD(diff,8)=6 → 제압,
+//   MOD(diff,4)=3 → 온살, MOD(diff,8)=2 → 쇄빙
+const ROTATION_BASE = Date.UTC(2026, 0, 1)
+function rotationLabel(year: number, month: number, day: number): string {
+  const diff = Math.round((Date.UTC(year, month, day) - ROTATION_BASE) / 86400000)
+  const r4 = ((diff % 4) + 4) % 4
+  const r8 = ((diff % 8) + 8) % 8
+  if (r4 === 0) return '워코치테'
+  if (r4 === 1) return '봉바'
+  if (r8 === 6) return '제압'
+  if (r4 === 3) return '온살'
+  if (r8 === 2) return '쇄빙'
+  return ''
+}
+
 // Mini month calendar that fits its cell without scrolling: rows use 1fr so the
 // grid always fills the available height, and fonts scale with the card size.
 // Clicking a day opens Google Calendar's day view in a new tab.
@@ -126,17 +143,34 @@ export default function CalendarWidget() {
               background: d && isToday(d) ? 'var(--accent)' : 'transparent',
               color: d && isToday(d) ? '#fff' : 'inherit',
               borderRadius: clamp(4, cell * 0.2, 10),
-              fontSize: dayFont,
-              display: 'grid',
-              placeItems: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              lineHeight: 1.05,
               cursor: d ? 'pointer' : 'default',
               visibility: d === null ? 'hidden' : 'visible',
               minWidth: 0,
               minHeight: 0,
               padding: 0,
+              overflow: 'hidden',
             }}
           >
-            {d ?? ''}
+            <span style={{ fontSize: dayFont }}>{d ?? ''}</span>
+            {d && (
+              <span
+                style={{
+                  fontSize: clamp(6, cell * 0.26, 10),
+                  color: isToday(d) ? '#fff' : 'var(--text-muted)',
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {rotationLabel(view.year, view.month, d)}
+              </span>
+            )}
           </button>
         ))}
       </div>
