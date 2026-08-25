@@ -44,6 +44,9 @@ async function getCurrentSha(token: string): Promise<string | undefined> {
   const res = await fetch(
     `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}?ref=${BRANCH}`,
     {
+      // no-store: avoid the browser HTTP cache returning a stale sha, which
+      // would make the PUT below fail with a 409 sha-mismatch conflict.
+      cache: 'no-store',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/vnd.github+json',
@@ -62,25 +65,31 @@ export async function publishToGitHub(
   config: DashboardConfig,
   token: string,
 ): Promise<{ commitUrl: string }> {
-  const sha = await getCurrentSha(token)
-  const body = {
-    message: 'chore(nest): update dashboard config',
-    content: toBase64Utf8(JSON.stringify(config, null, 2)),
-    branch: BRANCH,
-    ...(sha ? { sha } : {}),
-  }
-  const res = await fetch(
-    `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`,
-    {
+  const content = toBase64Utf8(JSON.stringify(config, null, 2))
+
+  const putOnce = async (sha: string | undefined) =>
+    fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/vnd.github+json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
-    },
-  )
+      body: JSON.stringify({
+        message: 'chore(nest): update dashboard config',
+        content,
+        branch: BRANCH,
+        ...(sha ? { sha } : {}),
+      }),
+    })
+
+  let res = await putOnce(await getCurrentSha(token))
+  // 409 = sha mismatch (file changed since our lookup). Re-fetch the current
+  // sha and retry once.
+  if (res.status === 409) {
+    res = await putOnce(await getCurrentSha(token))
+  }
+
   if (!res.ok) {
     let detail = `HTTP ${res.status}`
     try {
