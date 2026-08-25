@@ -11,7 +11,7 @@
         "x": 0,
         "y": 0,
         "w": 2,
-        "h": 3
+        "h": 2
       },
       "props": {
         "src": "",
@@ -77,8 +77,8 @@
       "type": "link",
       "layout": {
         "x": 0,
-        "y": 3,
-        "w": 2,
+        "y": 2,
+        "w": 1,
         "h": 1
       },
       "props": {
@@ -92,7 +92,7 @@
       "type": "link",
       "layout": {
         "x": 0,
-        "y": 4,
+        "y": 3,
         "w": 1,
         "h": 1
       },
@@ -106,7 +106,7 @@
       "id": "37707c91-2c77-42e7-bf50-913975a4e02a",
       "type": "link",
       "layout": {
-        "x": 1,
+        "x": 0,
         "y": 4,
         "w": 1,
         "h": 1
@@ -115,6 +115,20 @@
         "title": "할부 페이지",
         "url": "https://waltzo.github.io/Halboos/",
         "icon": "🔗"
+      }
+    },
+    {
+      "id": "f56845bf-4b2c-42b1-87cc-03b6f77b6c0e",
+      "type": "youtube",
+      "layout": {
+        "x": 8,
+        "y": 5,
+        "w": 4,
+        "h": 3
+      },
+      "props": {
+        "url": "https://youtu.be/l_1-ZD87g5s?si=FvgmDsAgBYRNAl4j",
+        "title": "Music"
       }
     }
   ],
