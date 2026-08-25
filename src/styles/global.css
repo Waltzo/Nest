@@ -71,18 +71,16 @@
 :root[data-theme='dark'] {
   --grid-line: rgba(255, 255, 255, 0.05);
   --grid-line-strong: rgba(255, 255, 255, 0.12);
-  --grid-line-edit: rgba(129, 140, 248, 0.3);
-  --bg-1: #1e1b4b;
-  --bg-2: #3b0764;
-  --bg-3: #0c4a6e;
+  --grid-line-edit: rgba(161, 161, 170, 0.35);
+  --bg-1: #1b1b1e;
+  --bg-2: #2a2a2e;
+  --bg-3: #36363b;
   --text: #f3f4f6;
-  --text-muted: #9ca3af;
-  --accent: #818cf8;
-  --glass-bg: rgba(30, 30, 46, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  /* Dark mode: desaturate 50%, brighten 20%. */
-  filter: saturate(0.5) brightness(1.2);
+  --text-muted: #a1a1aa;
+  --accent: #6b7280;
+  --glass-bg: rgba(40, 40, 44, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
 * {
