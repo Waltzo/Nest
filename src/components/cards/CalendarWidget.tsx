@@ -160,7 +160,7 @@ export default function CalendarWidget() {
             {d && (
               <span
                 style={{
-                  fontSize: clamp(6, cell * 0.26, 10),
+                  fontSize: '8pt',
                   color: isToday(d) ? '#fff' : 'var(--text-muted)',
                   maxWidth: '100%',
                   overflow: 'hidden',

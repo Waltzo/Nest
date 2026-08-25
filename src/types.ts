@@ -66,8 +66,8 @@ export interface Card {
 
 // Two fixed breakpoints only, each with its own stored layout.
 export const SM_COLS = 4
-// Below this container width the dashboard renders the mobile (sm) layout.
-export const SM_VIEW_BREAK = 700
+// Below this viewport width the dashboard renders the mobile (sm) layout.
+export const SM_VIEW_BREAK = 1024
 
 export interface DashboardConfig {
   version: number

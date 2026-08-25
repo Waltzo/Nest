@@ -107,15 +107,25 @@ export default function GridBoard({
     return () => ro.disconnect()
   }, [])
 
+  // Breakpoint follows the viewport width (not the container), so "1024" means
+  // the actual screen width regardless of page padding.
+  const [vw, setVw] = useState(() => window.innerWidth)
+  useEffect(() => {
+    const onResize = () => setVw(window.innerWidth)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   // Active breakpoint: while editing it's the user's chosen target; otherwise
-  // it follows the actual container width.
+  // it follows the viewport width (< 1024 → mobile 4-col).
   const activeBp: Breakpoint = editing
     ? editBreakpoint
-    : width > 0 && width < SM_VIEW_BREAK
+    : vw < SM_VIEW_BREAK
       ? 'sm'
       : 'lg'
   const nCols = activeBp === 'sm' ? SM_COLS : cols
-  const constrainSm = editing && activeBp === 'sm'
+  // Mobile layout is always constrained + centered with side margins.
+  const constrainSm = activeBp === 'sm'
 
   const layout: Layout[] = useMemo(
     () =>
