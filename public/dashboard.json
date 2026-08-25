@@ -7,7 +7,12 @@
     {
       "id": "seed-profile",
       "type": "image",
-      "layout": { "x": 0, "y": 0, "w": 3, "h": 3 },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 2,
+        "h": 3
+      },
       "props": {
         "src": "",
         "name": "Waltzo",
@@ -17,42 +22,101 @@
     {
       "id": "seed-clock",
       "type": "clock",
-      "layout": { "x": 3, "y": 0, "w": 3, "h": 2 },
-      "props": { "timezone": "Asia/Seoul", "format24": true }
+      "layout": {
+        "x": 10,
+        "y": 0,
+        "w": 2,
+        "h": 1
+      },
+      "props": {
+        "timezone": "Asia/Seoul",
+        "format24": true
+      }
     },
     {
       "id": "seed-weather",
       "type": "weather",
-      "layout": { "x": 6, "y": 0, "w": 3, "h": 2 },
-      "props": { "lat": 37.5665, "lon": 126.978, "label": "서울" }
+      "layout": {
+        "x": 8,
+        "y": 0,
+        "w": 2,
+        "h": 1
+      },
+      "props": {
+        "lat": 37.5665,
+        "lon": 126.978,
+        "label": "서울"
+      }
     },
     {
       "id": "seed-calendar",
       "type": "calendar",
-      "layout": { "x": 9, "y": 0, "w": 3, "h": 3 },
+      "layout": {
+        "x": 8,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
       "props": {}
     },
     {
       "id": "seed-memo",
       "type": "memo",
-      "layout": { "x": 3, "y": 2, "w": 3, "h": 3 },
-      "props": { "markdown": "# Notes\n\n- Edit me\n- Drag & resize in edit mode" }
+      "layout": {
+        "x": 2,
+        "y": 0,
+        "w": 3,
+        "h": 5
+      },
+      "props": {
+        "markdown": "# Notes\n\n- Edit me\n- Drag & resize in edit mode"
+      }
     },
     {
       "id": "seed-github",
       "type": "link",
-      "layout": { "x": 6, "y": 2, "w": 2, "h": 2 },
-      "props": { "title": "GitHub", "url": "https://github.com/Waltzo", "icon": "🐙" }
+      "layout": {
+        "x": 0,
+        "y": 3,
+        "w": 2,
+        "h": 1
+      },
+      "props": {
+        "title": "GitHub",
+        "url": "https://github.com/Waltzo",
+        "icon": "🐙"
+      }
     },
     {
-      "id": "seed-gcal",
+      "id": "39e29c1d-c8f7-4571-8769-91bd758f38cf",
       "type": "link",
-      "layout": { "x": 8, "y": 2, "w": 2, "h": 2 },
+      "layout": {
+        "x": 0,
+        "y": 4,
+        "w": 1,
+        "h": 1
+      },
       "props": {
-        "title": "Google Calendar",
-        "url": "https://calendar.google.com",
-        "icon": "📅"
+        "title": "정산 페이지",
+        "url": "https://waltzo.github.io/SettleUp/",
+        "icon": "🧾"
+      }
+    },
+    {
+      "id": "37707c91-2c77-42e7-bf50-913975a4e02a",
+      "type": "link",
+      "layout": {
+        "x": 1,
+        "y": 4,
+        "w": 1,
+        "h": 1
+      },
+      "props": {
+        "title": "할부 페이지",
+        "url": "https://waltzo.github.io/Halboos/",
+        "icon": "🔗"
       }
     }
-  ]
+  ],
+  "editPasswordHash": "942d534f96ce590cd4afde28e9656d4c4206d0928d991a80bcbfcd9b3a9aa8a5"
 }
