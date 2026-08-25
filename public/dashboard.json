@@ -10,7 +10,7 @@
       "layout": {
         "x": 0,
         "y": 0,
-        "w": 3,
+        "w": 4,
         "h": 2
       },
       "props": {
@@ -65,7 +65,7 @@
       "layout": {
         "x": 0,
         "y": 2,
-        "w": 3,
+        "w": 4,
         "h": 5
       },
       "props": {
@@ -129,6 +129,21 @@
       "props": {
         "url": "https://youtu.be/l_1-ZD87g5s?si=FvgmDsAgBYRNAl4j",
         "title": "Music"
+      }
+    },
+    {
+      "id": "5d62247f-fdad-40f2-869f-b53dc25f5e9c",
+      "type": "image",
+      "layout": {
+        "x": 4,
+        "y": 0,
+        "w": 4,
+        "h": 8
+      },
+      "props": {
+        "src": "https://pbs.twimg.com/media/G7fNgLzacAA9MHM?format=jpg&name=4096x4096",
+        "alt": "image",
+        "caption": ""
       }
     }
   ],
